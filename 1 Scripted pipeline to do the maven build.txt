@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    tools {
+        maven "mymaven"
+        jdk "myjava"
+    }
+    stages {
+        stage('Initialize'){
+            steps{
+                echo "PATH = ${M2_HOME}/bin:${PATH}"
+                echo "M2_HOME = /usr/share/maven"
+            }
+        }
+		stage('clone'){
+            steps{
+                git 'https://gitlab.com/gitaitsolutions1/javaparser-maven-sample.git'
+            }
+	    }
+        stage('Build') {
+            steps {
+                dir("/var/lib/jenkins/workspace/$JOB_NAME") {
+                sh 'mvn -B -DskipTests clean package'
+                }
+            }
+        }
+     }
+
+}
